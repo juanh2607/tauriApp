@@ -12,6 +12,9 @@
   },
   "tauri": {
     "allowlist": {
+      "window": {
+        "show": true
+      },
       "all": false
     },
     "bundle": {
@@ -57,9 +60,10 @@
       {
         "fullscreen": false,
         "height": 600,
+        "width": 800,
         "resizable": true,
         "title": "tauriapp",
-        "width": 800
+        "visible": false
       }
     ]
   }
