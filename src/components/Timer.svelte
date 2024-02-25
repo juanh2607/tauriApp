@@ -1,11 +1,10 @@
 <!-- TODO: mejorar la barra de cargado -->
-<!-- TODO: deja de mostrar segundos y mostrá en formato hh-mm-ss -->
 
 <script>
   import { onMount } from 'svelte';
   //import { tweened } from 'svelte/motion';
   //import { cubicOut } from 'svelte/easing';
-  import { getTimerText, getTimeLeft } from '../lib/timerUtils';
+  import { getTimerText, getTimeLeft, getProgressBarColor } from '../lib/timerUtils';
 
   export let title = '';
   export let startingTime = 0;
@@ -15,6 +14,7 @@
   let unpauseDate = null; // If null, then the timer is paused
   let timeoutId = null;
   let pauseButtonDisabled = false;
+  let progressBarColor = '';
 
   /*const progress = tweened(remainingTime, {
     duration: startingTime,
@@ -30,6 +30,7 @@
   const update = () => {
     timeLeft = getTimeLeft(remainingTime, unpauseDate);
     //progress.set(timeLeft / startingTime);
+    progressBarColor = getProgressBarColor(startingTime, timeLeft);
 
     if (timeLeft > 0) {
       timeoutId = setTimeout(update, 1000);
@@ -55,6 +56,7 @@
     if (paused) {
       remainingTime = startingTime;
       timeLeft = startingTime;
+      progressBarColor = getProgressBarColor(startingTime, timeLeft);
     } else {
       remainingTime = startingTime;
       timeLeft = startingTime;
@@ -71,6 +73,7 @@
   };
 
   onMount(() => {
+    progressBarColor = getProgressBarColor(startingTime, timeLeft);
     if (!paused) {
       start();
     }
@@ -82,7 +85,8 @@
   <div class='time'>
     {getTimerText(timeLeft)}
   </div>
-  <div class='progress' style='width: {timeLeft / startingTime * 100}%'></div>
+  <div class='progress' style='width: {timeLeft / startingTime * 100}%;
+    background-color: {progressBarColor};'></div>
   <!--<progress class='progress' value={$progress} /> -->
 
   <button on:click={handlePause} disabled={pauseButtonDisabled}>

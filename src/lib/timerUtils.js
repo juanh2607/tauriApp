@@ -30,3 +30,29 @@ export function getTimeLeft(remainingTime, unpauseDate) {
 
   return remainingTime - elapsedTime;
 }
+
+/**
+ * @param {number} startingTime - In seconds
+ * @param {number} remainingTime - In seconds
+ * @returns {string} - Color in rgb format
+ */
+export function getProgressBarColor(startingTime, remainingTime) {
+  const percentage = 1 - (1 - (remainingTime / startingTime));
+  let r, g, b;
+
+  if (percentage === 1) {
+    return '#0C2D57';
+  } else if (percentage < 0.7) {
+    const p = percentage * 2;
+    r = Math.round(12 * (1 - p) + 255 * p);
+    g = Math.round(45 * (1 - p) + 176 * p);
+    b = Math.round(87 * (1 - p) + 176 * p);
+  } else {
+    const p = (percentage - 0.7) * 0.3;
+    r = Math.round(255 * (1 - p) + 252 * p);
+    g = Math.round(176 * (1 - p) + 103 * p);
+    b = Math.round(176 * (1 - p) + 54 * p);
+  }
+  
+  return `rgb(${r}, ${g}, ${b})`;
+}

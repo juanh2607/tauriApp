@@ -6,7 +6,7 @@
 
   import Components from '../components/Components.svelte';
 
-
+  // TODO: comunicarse con el back para recibir los datos.
   const data = {
     "timerData": [
       {
@@ -32,6 +32,14 @@
         "paused": true,
         "leftOffset": 293,
         "topOffset": 330
+      },
+      {
+        "title": "Test",
+        "startingTime": "10",
+        "remainingTime": "10",
+        "paused": true,
+        "leftOffset": 500,
+        "topOffset": 500
       }
     ]
   }
