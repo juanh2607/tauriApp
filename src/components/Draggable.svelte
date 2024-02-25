@@ -19,7 +19,7 @@
     document.addEventListener('pointermove', dragItem);
   }
 
-  const stopMotion = (event) => {
+  const stopMotion = () => {
     document.removeEventListener('pointermove', dragItem);
   }
 
@@ -34,7 +34,7 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div class='container' bind:this={container}
   on:mouseover={() => display = 'block'}
-  on:mouseout={() => display = 'none'}
+  on:mouseout= {() => display = 'none'}
 >
   <button class='button dragButton' style='display: {display};'
     on:pointerdown|preventDefault={startMotion}
