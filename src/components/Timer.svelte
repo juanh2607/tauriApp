@@ -1,15 +1,25 @@
+<!-- TODO: mejorar la barra de cargado -->
+<!-- TODO: deja de mostrar segundos y mostrá en formato hh-mm-ss -->
+
 <script>
   import { onMount } from 'svelte';
+  //import { tweened } from 'svelte/motion';
+  //import { cubicOut } from 'svelte/easing';
+  import { getTimerText, getTimeLeft } from '../lib/timerUtils';
 
   export let title = '';
   export let startingTime = 0;
-  // Stores the remaining time when last unpaused. Used for timeLeft calculation
-  export let remainingTime = 0; 
+  export let remainingTime = 0; // Stores the remaining time when last unpaused. Used for timeLeft calculation 
   export let paused = true;
   let timeLeft = remainingTime; // For reactive state
   let unpauseDate = null; // If null, then the timer is paused
   let timeoutId = null;
   let pauseButtonDisabled = false;
+
+  /*const progress = tweened(remainingTime, {
+    duration: startingTime,
+    easing: cubicOut
+  });*/
 
   const start = () => {
     paused = false;
@@ -18,7 +28,8 @@
   };
 
   const update = () => {
-    timeLeft = getTimeLeft();
+    timeLeft = getTimeLeft(remainingTime, unpauseDate);
+    //progress.set(timeLeft / startingTime);
 
     if (timeLeft > 0) {
       timeoutId = setTimeout(update, 1000);
@@ -59,19 +70,6 @@
     // TODO: lanzar una notificación
   };
 
-  /** @returns {number} - Seconds left */
-  const getTimeLeft = () => {
-    if (!paused) {
-      const now = new Date();
-      const elapsedTime = Math.floor((now - unpauseDate) / 1000);
-      if (remainingTime - elapsedTime < 0) {
-        return 0;
-      }
-      return remainingTime - elapsedTime;
-    }
-    return remainingTime;
-  }
-
   onMount(() => {
     if (!paused) {
       start();
@@ -81,12 +79,18 @@
 
 <div class='container'>
   <h3>{title}</h3>
-  <div class='time'>{timeLeft}</div>
+  <div class='time'>
+    {getTimerText(timeLeft)}
+  </div>
   <div class='progress' style='width: {timeLeft / startingTime * 100}%'></div>
+  <!--<progress class='progress' value={$progress} /> -->
+
   <button on:click={handlePause} disabled={pauseButtonDisabled}>
     {paused ? 'Unpause' : 'Pause'}
   </button>
-  <button on:click={reset}>Restart</button>
+  <button on:click={reset}>
+    Restart
+  </button>
 </div>
 
 <style>
@@ -116,7 +120,7 @@
 
   .progress {
     width: 100%;
-    background: #0C2D57; 
+    background-color: #0C2D57; 
     height: 20px;
     transition: background 1s;
     border-radius: 5px;
