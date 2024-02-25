@@ -2,13 +2,15 @@
   // TODO: usar SVG para el botón
   import { onMount } from 'svelte'; // TODO: on mount, set container coordinates
   
-  export let oldX = 0;
-  export let oldY = 0;
+  export let position = {x: 100, y: 100}
+  let oldX = 0;
+  let oldY = 0;
   let display = 'none';
   let container;
 
   onMount(() => {
-    container = document.querySelector('.container');
+    container.style.left = position.x + "px";
+    container.style.top  = position.y + "px"
   });
 
   const startMotion = (event) => {
@@ -30,7 +32,7 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-<div class='container'  
+<div class='container' bind:this={container}
   on:mouseover={() => display = 'block'}
   on:mouseout={() => display = 'none'}
 >

@@ -11,8 +11,16 @@
 </script>
 
 <body>
-  <Draggable>
+  <Draggable position={{x: 800, y: 100}}>
     <Timer title={'Facultad'} startingTime={100} remainingTime={10} paused={true}/>
+  </Draggable>
+
+  <Draggable position={{x: 800, y: 400}}>
+    <Timer title={'Otro'} startingTime={100} remainingTime={10} paused={true}/>
+  </Draggable>
+
+  <Draggable position={{x: 200, y: 400}}>
+    <Timer title={'Probando'} startingTime={100} remainingTime={10} paused={true}/>
   </Draggable>
 
   <button id='add'>+</button>
