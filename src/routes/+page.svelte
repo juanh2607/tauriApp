@@ -1,5 +1,6 @@
 <script>
   import '../styles/global.css';
+  import '../lib/index.js';
   // Utils
   import { onMount } from 'svelte';
   import { appWindow } from '@tauri-apps/api/window';
