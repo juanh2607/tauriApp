@@ -1,6 +1,6 @@
 <script>
   import '../styles/global.css';
-  import '../lib/index.js';
+  import { get_component_data } from '../lib/index.js';
   // Utils
   import { onMount } from 'svelte';
   import { appWindow } from '@tauri-apps/api/window';
@@ -8,50 +8,17 @@
   import Components from '../components/Components.svelte';
 
   // TODO: comunicarse con el back para recibir los datos.
-  const data = {
-    "timerData": [
-      {
-        "title": "Facultad",
-        "startingTime": "28800",
-        "remainingTime": 17931,
-        "paused": true,
-        "leftOffset": 0,
-        "topOffset": 18
-      },
-      {
-        "title": "Bloque Estudio",
-        "startingTime": "2700",
-        "remainingTime": "2700",
-        "paused": true,
-        "leftOffset": 291,
-        "topOffset": 19
-      },
-      {
-        "title": "Proyecto",
-        "startingTime": "5400",
-        "remainingTime": "5400",
-        "paused": true,
-        "leftOffset": 293,
-        "topOffset": 330
-      },
-      {
-        "title": "Test",
-        "startingTime": "10",
-        "remainingTime": "10",
-        "paused": true,
-        "leftOffset": 500,
-        "topOffset": 500
-      }
-    ]
-  }
-  // TODO: ver si usar #each es muy eficiente o no. Por legibilidad y escalabilidad,
-  // crea un componentLoader.js que reciba la data del back, y vaya agregando 
-  // elementos al body
+  let data = null;
 
-  onMount(() => appWindow.show());
+  onMount(async () => {
+    data = await get_component_data();
+    appWindow.show();
+  });
 </script>
 
 <body>
-  <Components data={data}/>
+  {#if data !== null}
+    <Components data={data} />
+  {/if}
   <button id='add'>+</button>
 </body>

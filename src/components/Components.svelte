@@ -11,14 +11,16 @@
 </script>
 
 <!-- Just add de components here with #each or #if -->
-{#each data.timerData as t (t.title)}
-  <Draggable position={{x: t.leftOffset, y: t.topOffset}}>
-    <Timer 
-      title={t.title}
-      startingTime={t.startingTime}
-      remainingTime={t.remainingTime}
-      paused={t.paused}
-    />
-  </Draggable>
-{/each}
+{#if data.timer_data !== undefined}
+  {#each data.timer_data as t (t.title)}
+    <Draggable position={{x: t.left_offset, y: t.top_offset}}>
+      <Timer 
+        title={t.title}
+        startingTime={t.starting_time}
+        remainingTime={t.remaining_time}
+        paused={t.paused}
+      />
+    </Draggable>
+  {/each}
+{/if}
 
