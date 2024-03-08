@@ -6,6 +6,8 @@ mod api;
 mod file_ops;
 
 fn main() {
+  // TODO: ver como habilitar un autolaunch
+
   tauri::Builder::default()
     .invoke_handler(tauri::generate_handler![
       api::get_component_data
