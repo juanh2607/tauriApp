@@ -4,19 +4,25 @@ import '../lib/jsdoc';
 // TODO: agregar pantalla de carga.
 import { invoke } from '@tauri-apps/api/tauri';
 import { appWindow } from '@tauri-apps/api/window';
-import { appIsClosing, finishedCheckout } from './appGlobalState.js';
+import { 
+  appIsClosing, finishedCheckout, // Events
+  getComponentCount, getComponentData // Data
+} from './appGlobalState.js';
 
 appWindow.onCloseRequested(async (event) => {
   event.preventDefault();
 
-  // TODO: si no hay ningún componente creado tenés que cerrar de una
-  appIsClosing.set(true); // Sends signal to suscribed components
+  if (getComponentCount() === 0) { // No component was created or still exists
+    appWindow.close();
+  }
+  appIsClosing.set(true); // Sends signal to suscribed components so that they checkout
 });
 
-finishedCheckout.subscribe((value) => {
+finishedCheckout.subscribe(async (value) => {
   if (value === true) {
-    console.log("Todos los componentes hicieron checkout! Cerrando...")
-    //await invoke('store_data', { data });
+    const data = getComponentData(); 
+    
+    await invoke('store_data', { data });
     appWindow.close();
   }
 });

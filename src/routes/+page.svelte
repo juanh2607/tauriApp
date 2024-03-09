@@ -12,7 +12,6 @@
 
   onMount(async () => {
     data = await get_component_data();
-    console.log(data);
     appWindow.show();
   });
 </script>

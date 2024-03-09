@@ -1,15 +1,27 @@
-// This file works with the Svelte store.
+// This file works with Svelte store to manage signals when closing
+
 import './jsdoc.js';
 import { writable } from 'svelte/store';
 
 let componentCount = 0;
+
 /** @type {ComponentsData} */
 const componentsData = {
   timer_data: [],
   last_reset: ''
 };
 
-// TODO: por ahí es mejor llamar a esto globalAppState o algo así
+/** @returns {number} copy of componentCount */
+export function getComponentCount() {
+  return componentCount;
+}
+
+/** @returns {ComponentsData} - A copy of componentsData */
+export function getComponentData() {
+  // "Hack" to return a deep copy
+  return JSON.parse(JSON.stringify(componentsData));
+}
+
 
 // TODO: ver si podés separar la lógica del subscribe y el set para solo importar
 // lo que tengas que usar (y prevenir errores)
@@ -19,16 +31,33 @@ export const finishedCheckout = writable(false);
 
 // OBS: js es de hilo único por lo que pareciera no haber necesidad de hacer atómicas las operaciones.
 
+/** Increase the global component counter. Needed for a correct closing of the app */
 export function checkInComponent() {
   componentCount++;
-  console.log("Sume uno:" + componentCount);
 }
 
-// TODO: hay que checkear el tipo de data que llega para insertarlo correctamente en componentsData
-export function checkOutComponent(data) {
-  // componentData.push(data);
+/**
+ * @typedef {Object} SingleComponentData - Object that stores the data of a specific component
+ * @property {string} type - The name of the component
+ * @property {Object} value - The actual content of the component 
+ */
+
+/** 
+ * Call when app is closing or when destroying a component. 
+ * OBS: if the component is being destroyed, don't pass any data.
+ * @param {SingleComponentData} data 
+ */
+export function checkOutComponent(data = null) {
+  if (data) {
+    if (data.type === 'timer') {
+      componentsData.timer_data.push(data.value);
+    } else {
+      throw new Error('Unkown type at checkOutComponent. Received: ' + data.type);
+    }
+  }
+
   componentCount--;
-  console.log("Sume uno:" + componentCount);
+  
   if (componentCount === 0) {
     finishedCheckout.set(true);
   }

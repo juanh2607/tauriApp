@@ -24,6 +24,22 @@
     easing: cubicOut
   });*/
 
+  /**
+   * Creates a TimerData object with the current values of the component
+   * @returns {TimerData}
+   */
+   const generateTimerData = () => {
+    // TODO: para los offsets necesitas hacer un query selector por id del container
+    return {
+      title: title,
+      starting_time: startingTime,
+      remaining_time: remainingTime,
+      paused: paused,
+      left_offset: 0,
+      top_offset: 0
+    }
+  };
+
   onMount(() => {
     checkInComponent();
     progressBarColor = getProgressBarColor(startingTime, timeLeft);
@@ -35,7 +51,12 @@
   appIsClosing.subscribe((value) => {
     if (value === true) {
       // TODO: deberias generar los datos y mandarlos ahora
-      checkOutComponent();
+      const data = {
+        type: 'timer',
+        value: generateTimerData() // TODO: ni idea funciona, pensé que no pq no debería haber hoisting
+      }
+
+      checkOutComponent(data);
     }
   });
 
@@ -89,23 +110,6 @@
     pauseButtonDisabled = true;
     // TODO: lanzar una notificación
   };
-
-  /**
-   * Creates a TimerData object with the current values of the component
-   * @returns {TimerData}
-   */
-  const generateTimerData = () => {
-    // TODO: para los offsets necesitas hacer un query selector por id del container
-    return {
-      title: title,
-      starting_time: startingTime,
-      remaining_time: remainingTime,
-      paused: paused,
-      left_offset: 0,
-      top_offset: 0
-    }
-  };
-
 </script>
 
 <div class='container'>
