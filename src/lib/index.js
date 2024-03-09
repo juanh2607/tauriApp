@@ -4,26 +4,21 @@ import '../lib/jsdoc';
 // TODO: agregar pantalla de carga.
 import { invoke } from '@tauri-apps/api/tauri';
 import { appWindow } from '@tauri-apps/api/window';
+import { appIsClosing, finishedCheckout } from './appGlobalState.js';
 
 appWindow.onCloseRequested(async (event) => {
   event.preventDefault();
 
-  let timerData = {
-    title: 'Mi Temporizador',
-    starting_time: 3600,
-    remaining_time: 1800,
-    paused: false,
-    left_offset: 0,
-    top_offset: 0
-  };
+  // TODO: si no hay ningún componente creado tenés que cerrar de una
+  appIsClosing.set(true); // Sends signal to suscribed components
+});
 
-  let componentData = {
-    timer_data: [timerData],
-    last_reset: '2024-03-08T17:16:10Z'
-  };
-  
-  await invoke('store_data', {data: componentData});
-  appWindow.close();
+finishedCheckout.subscribe((value) => {
+  if (value === true) {
+    console.log("Todos los componentes hicieron checkout! Cerrando...")
+    //await invoke('store_data', { data });
+    appWindow.close();
+  }
 });
 
 /** @returns {ComponentsData} */

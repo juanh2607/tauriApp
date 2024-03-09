@@ -1,6 +1,7 @@
 <script>
   // Receives the data of all components and instanciates them accordingly.
   // Note: every component is wrapped on a draggable container for now.
+
   import '../lib/jsdoc.js';
 
   import Draggable from './Draggable.svelte';

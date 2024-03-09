@@ -1,10 +1,13 @@
 <!-- TODO: mejorar la barra de cargado -->
 
 <script>
+  import '../lib/jsdoc';
+  // TODO: esta logica debería estar en Component.js pero es un bardo
+  import { appIsClosing, checkInComponent, checkOutComponent} from '../lib/appGlobalState.js';
   import { onMount } from 'svelte';
   //import { tweened } from 'svelte/motion';
   //import { cubicOut } from 'svelte/easing';
-  import { getTimerText, getTimeLeft, getProgressBarColor } from '../lib/timerUtils';
+  import { getTimerText, getTimeLeft, getProgressBarColor } from '../lib/utils/timerUtils';
 
   export let title = '';
   export let startingTime = 0;
@@ -20,6 +23,21 @@
     duration: startingTime,
     easing: cubicOut
   });*/
+
+  onMount(() => {
+    checkInComponent();
+    progressBarColor = getProgressBarColor(startingTime, timeLeft);
+    if (!paused) {
+      start();
+    }
+  });
+
+  appIsClosing.subscribe((value) => {
+    if (value === true) {
+      // TODO: deberias generar los datos y mandarlos ahora
+      checkOutComponent();
+    }
+  });
 
   const start = () => {
     paused = false;
@@ -72,12 +90,22 @@
     // TODO: lanzar una notificación
   };
 
-  onMount(() => {
-    progressBarColor = getProgressBarColor(startingTime, timeLeft);
-    if (!paused) {
-      start();
+  /**
+   * Creates a TimerData object with the current values of the component
+   * @returns {TimerData}
+   */
+  const generateTimerData = () => {
+    // TODO: para los offsets necesitas hacer un query selector por id del container
+    return {
+      title: title,
+      starting_time: startingTime,
+      remaining_time: remainingTime,
+      paused: paused,
+      left_offset: 0,
+      top_offset: 0
     }
-  });
+  };
+
 </script>
 
 <div class='container'>
