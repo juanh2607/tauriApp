@@ -9,3 +9,8 @@ pub fn get_component_data() -> ComponentData {
 
   file_ops::get_component_data()
 }
+
+#[tauri::command]
+pub fn store_data(data: ComponentData) {
+  println!("{:#?}", data);
+}

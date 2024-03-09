@@ -44,7 +44,6 @@ pub fn get_component_data() -> ComponentData {
     f.read_to_string(& mut buffer).unwrap();
 
     let data: ComponentData = serde_json::from_str(&buffer[..]).unwrap();
-
     data
 }
 
