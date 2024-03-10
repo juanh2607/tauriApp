@@ -9,6 +9,7 @@
   //import { cubicOut } from 'svelte/easing';
   import { getTimerText, getTimeLeft, getProgressBarColor } from '../lib/utils/timerUtils';
 
+  export let id = null;
   export let title = '';
   export let startingTime = 0;
   export let remainingTime = 0; // Stores the remaining time when last unpaused. Used for timeLeft calculation 
@@ -30,13 +31,16 @@
    */
    const generateTimerData = () => {
     // TODO: para los offsets necesitas hacer un query selector por id del container
+    const container = document.getElementById(id);
+
     return {
       title: title,
       starting_time: startingTime,
       remaining_time: remainingTime,
       paused: paused,
-      left_offset: 0,
-      top_offset: 0
+      // Get draggable offset
+      left_offset: container.offsetParent.offsetLeft,
+      top_offset: container.offsetParent.offsetTop
     }
   };
 
@@ -112,7 +116,7 @@
   };
 </script>
 
-<div class='container'>
+<div id='{id}' class='container'>
   <h3>{title}</h3>
   <div class='time'>
     {getTimerText(timeLeft)}

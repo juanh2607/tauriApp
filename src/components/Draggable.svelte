@@ -40,7 +40,9 @@
     on:pointerdown|preventDefault={startMotion}
     on:pointerup={stopMotion}
   >.</button>
+  
   <slot />
+  
 </div>
 
 <style>

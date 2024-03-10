@@ -3,6 +3,9 @@
 import './jsdoc.js';
 import { writable } from 'svelte/store';
 
+// TODO: contador global para usar de id. Solo se puede sumar. Que lo retorne el checkIn
+
+let idCounter = -1; // Used to generate the id for the components
 let componentCount = 0;
 
 /** @type {ComponentsData} */
@@ -29,10 +32,9 @@ export const appIsClosing = writable(false);
 
 export const finishedCheckout = writable(false);
 
-// OBS: js es de hilo único por lo que pareciera no haber necesidad de hacer atómicas las operaciones.
-
 /** Increase the global component counter. Needed for a correct closing of the app */
 export function checkInComponent() {
+  // OBS: js es de hilo único por lo que pareciera no haber necesidad de hacer atómicas las operaciones.
   componentCount++;
 }
 
@@ -63,5 +65,7 @@ export function checkOutComponent(data = null) {
   }
 }
 
-// TODO: necesito un contador de componentes (guarda con la concurrencia) para saber cuantos componentes hay.
-// Cuando llega a 0 es porque los componentes ya hicieron el check out (guardaron su estado en el array de estados).
+/** @returns {number} */
+export function getComponentId() {
+  return ++idCounter;
+}

@@ -6,6 +6,7 @@
 
   import Draggable from './Draggable.svelte';
   import Timer from './Timer.svelte';
+  import { getComponentId } from '../lib/appGlobalState.js';
   
   /** @type {ComponentsData} */
   export let data = null;
@@ -16,6 +17,7 @@
   {#each data.timer_data as t (t.title)}
     <Draggable position={{x: t.left_offset, y: t.top_offset}}>
       <Timer 
+        id={getComponentId()}
         title={t.title}
         startingTime={t.starting_time}
         remainingTime={t.remaining_time}
